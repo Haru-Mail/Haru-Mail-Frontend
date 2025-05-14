@@ -216,13 +216,14 @@ html, body {
 .tag-section {
     margin-top: 10px;
     margin-bottom: 10px;
+    /*flex-wrap: wrap;*/
 }
 
-.selected-tags {
+.selected-tags-list {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 20px !important;
+    margin-bottom: 10px !important;
     margin-top: 0px !important;
 }
 

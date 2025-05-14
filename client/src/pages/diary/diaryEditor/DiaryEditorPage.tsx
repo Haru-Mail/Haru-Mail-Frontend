@@ -4,6 +4,7 @@ import Header from '../../header/Header.tsx';
 import {destroyEditor, getEditorData, getFormattedToday, initializeEditor} from './DiaryEditor.ts';
 import './DiaryEditorPage.css';
 import {CategoryTags, initialCategoryTags} from "./TagData.ts";
+import { handleTagClick, handleRemoveTag,} from './TagHandler.ts';
 
 export const DiaryEditorPage: React.FC = () => {
     const editorContainerRef = useRef<HTMLDivElement | null>(null);
@@ -79,12 +80,10 @@ export const DiaryEditorPage: React.FC = () => {
     // 일기 저장-> 콘솔 출력
     const handleSave = async () => {
         const content = await getEditorData();
-        // 토큰, userId 가져오기 필요
 
         const diaryData = {
             title: title,
             content: content,
-            userId: 1 // 1로 고정
         };
 
         const tagList = selectedTagIds.map(id => ({ tagId: id }));
@@ -152,7 +151,6 @@ export const DiaryEditorPage: React.FC = () => {
             const newTag = {
                 name: newTagName.trim(),
                 categoryId: 6,  // 기타 카테고리 ID
-                userId: 1 // 사용자 ID 임시 지정
             };
             console.log("태그 생성:", newTag);
 
@@ -163,6 +161,7 @@ export const DiaryEditorPage: React.FC = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`
                 },
+                credentials: "include",
                 body: JSON.stringify(newTag), // newTag를 JSON 형식으로 변환하여 body에 추가
             })
                 .then(response => response.json()) // 응답을 JSON으로 처리
@@ -194,42 +193,6 @@ export const DiaryEditorPage: React.FC = () => {
             setNewTagName('');
             setIsAddingTag(false);
         }
-    };
-
-    // 태그 클릭 시 선택 또는 선택 해제 처리
-    const handleTagClick = (tag: { id: number; emoji: string; label: string }) => {
-        // 이미 선택된 태그인지 확인
-        const alreadySelected = selectedTags.some((t) => t.id === tag.id);
-
-        if (alreadySelected) { // 이미 선택된 태그인 경우: 선택 해제
-            const updatedTags = selectedTags.filter((t) => t.id !== tag.id);
-            const updatedIds = selectedTagIds.filter((id) => id !== tag.id);
-
-            setSelectedTags(updatedTags);
-            setSelectedTagIds(updatedIds);
-
-            console.log("선택된 태그:", updatedTags); // 디버깅용
-        } else { // 선택되지 않은 태그인 경우: 선택 추가
-            const updatedTags = [...selectedTags, tag];
-            const updatedIds = [...selectedTagIds, tag.id];
-
-            setSelectedTags(updatedTags);
-            setSelectedTagIds(updatedIds);
-
-            console.log("선택된 태그:", updatedTags); // 디버깅용
-        }
-    };
-
-    // 태그 삭제
-    const handleRemoveTag = (tag: { id: number; emoji: string; label: string }) => {
-        // 선택된 태그 목록과 ID 목록에서 해당 태그 제거
-        const updatedTags = selectedTags.filter((t) => t.id !== tag.id);
-        const updatedIds = selectedTagIds.filter((id) => id !== tag.id);
-
-        setSelectedTags(updatedTags);
-        setSelectedTagIds(updatedIds);
-
-        console.log("남은 태그:", updatedTags); // 디버깅용
     };
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -273,9 +236,12 @@ export const DiaryEditorPage: React.FC = () => {
                 ></div>
 
                 <div className="tag-section">
-                    <div className="selected-tags">
+                    <div className="selected-tags-list">
                         {selectedTags.map((tag) => (
-                            <span key={tag.id} className="tag" onClick={() => handleRemoveTag(tag)}>#{tag.label}</span>
+                            <span key={tag.id} className="tag"
+                                  onClick={() => handleRemoveTag(tag, selectedTags, selectedTagIds, setSelectedTags, setSelectedTagIds)}>
+                                #{tag.label}
+                            </span>
                         ))}
                     </div>
                     <div className="category-buttons">
@@ -292,11 +258,11 @@ export const DiaryEditorPage: React.FC = () => {
 
                     {selectedCategory && (
                         <div className="tag-section">
-                            {categoryTags[selectedCategory].map((tag, index) => (
+                            {categoryTags[selectedCategory].map((tag) => (
                                 <span
-                                    key={tag.id} // key는 index보다 고유한 id가 더 안전
+                                    key={tag.id}
                                     className="category-tag"
-                                    onClick={() => handleTagClick(tag)}
+                                    onClick={() => handleTagClick(tag, selectedTags, selectedTagIds, setSelectedTags, setSelectedTagIds)}
                                     data-id={tag.id} // HTML에 id 포함
                                 >
                                     {tag.emoji} {tag.label}

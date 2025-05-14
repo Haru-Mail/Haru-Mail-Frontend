@@ -1,11 +1,17 @@
 import React, {useEffect, useRef, useState} from 'react';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './DiaryDetailPage.css';
 import {destroyEditor, initializeViewer} from "./DiaryDetailView.ts";
 import {DiaryInfoDto} from "./DiaryInfoDto.ts";
 
 const DiaryDetailPage: React.FC = () => {
+    const { diaryId } = useParams<{ diaryId: string }>(); // URL에서 diaryId 파라미터 추출
     const viewerContainerRef = useRef<HTMLDivElement | null>(null);
     const [diaryData, setDiaryData] = useState<DiaryInfoDto | null>(null);
+
+    const accessToken = localStorage.getItem("accessToken"); // 저장된 토큰 가져오기
+    const navigate = useNavigate();
 
     // 날짜 포맷팅 함수
     const formatDate = (dateString: string) => {
@@ -23,7 +29,13 @@ const DiaryDetailPage: React.FC = () => {
             if (!viewerContainerRef.current) return;
 
             try {
-                const res = await fetch('http://localhost:8080/diary/1'); // diary id: 1로 고정(임시)
+                const res = await fetch(`http://localhost:8080/diary/${diaryId}`, { // 토큰 기반 인증
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                    credentials: 'include'
+                });
                 const data: DiaryInfoDto = await res.json();
                 const savedJson = JSON.parse(data.content);
 
@@ -41,26 +53,28 @@ const DiaryDetailPage: React.FC = () => {
         return () => {
             destroyEditor();
         };
-    }, []);
+    }, [diaryId]);
 
     return (
-        <div className="container">
-            <button className="backButton">{'←'}</button>
-
-            <h1 className="title">{diaryData?.title || 'Loading...'}</h1>
-            <p className="date">{diaryData?.date ? formatDate(diaryData.date) : 'Loading...'}</p>
-
-            <div className="editorWrapper">
-                <div
-                    className="viewer-container"
-                    ref={viewerContainerRef}
-                ></div>
-            </div>
-
-            <div className="selected-tags">
-                {diaryData?.tags.map((tag, index) => (
-                    <div key={index} className="tag">#{tag}</div>
-                ))}
+        <div className="fullscreenContainer">
+            <button className="backButton"
+                    onClick={() => navigate(-1)}>
+                {'←'}
+            </button>
+            <div className="container">
+                <h1 className="title">{diaryData?.title || 'Loading...'}</h1>
+                <p className="date">{diaryData?.date ? formatDate(diaryData.date) : 'Loading...'}</p>
+                <div className="editorWrapper">
+                    <div
+                        className="viewer-container"
+                        ref={viewerContainerRef}
+                    ></div>
+                </div>
+                <div className="selected-tags">
+                    {diaryData?.tags.map((tag, index) => (
+                        <div key={index} className="tag">#{tag}</div>
+                    ))}
+                </div>
             </div>
         </div>
     );

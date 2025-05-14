@@ -1,0 +1,220 @@
+/* 메인 콘텐츠 영역 전체 패딩과 폰트 설정 */
+.main-content {
+    padding: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 검색창 영역 정렬 */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* 검색 입력창 스타일 */
+.search-bar input {
+    width: 400px;
+    padding: 10px 20px;
+    border: 2px solid #999;
+    border-radius: 25px 0 0 25px;
+    font-size: 16px;
+}
+
+/* 검색 버튼 스타일 */
+.search-button {
+    padding: 10px 20px;
+    border: 2px solid #999;
+    border-left: none;
+    border-radius: 0 25px 25px 0;
+    background-color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* 카테고리 버튼들을 감싸는 영역 */
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+/* 카테고리 버튼 기본 스타일 */
+.category {
+    padding: 8px 20px;
+    border-radius: 20px;
+    background-color: #ddd;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 선택된 카테고리 버튼 스타일 */
+.category.active {
+    background-color: #476BE3;
+    color: white;
+}
+
+/* 감정 태그를 카테고리처럼 버튼 스타일로 변경 */
+.tag-button {
+    display: inline-block;
+    padding: 6px 16px;
+    margin-top: 10px;
+    background-color: #ffecec;
+    color: #eb1c24;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1.5px solid #eb1c24;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tag-button:hover {
+    background-color: #eb1c24;
+    color: white;
+}
+
+/* 감정 태그 영역 정렬 */
+.tag-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;         /* 공간이 부족하면 자동으로 줄바꿈 */
+    margin-bottom: 15px;
+    gap: 10px;               /* 태그 간 간격 10px */
+}
+
+/* 아직 사용 x */
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 카드 사이 간격 */
+    margin: 0 40px;
+}
+
+/* 질문 카드 전체 스타일 */
+.question-card {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 0 40px 20px; /* 아래쪽 간격 추가 */
+    animation: fadeSlideIn 0.5s ease forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+/* 질문 카드 안의 날짜 박스 */
+.date-box {
+    background-color: #E53935;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+/* 질문 텍스트 */
+.question-text {
+    font-size: 18px;
+}
+
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.question-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.no-results-message {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 18px;
+    color: #888;
+}
+
+.diary-group {
+    /*margin-top: 2rem;*/
+}
+
+.diary-group-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-bottom: 1rem;
+}
+
+/*.selected-tags-container {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    flex-wrap: wrap;*/
+/*    width: 400px;*/
+/*    min-height: 42px;*/
+/*    padding: 10px 15px;*/
+/*    border: 2px solid #999;*/
+/*    border-radius: 25px 0 0 25px;*/
+/*    background-color: white;*/
+/*    font-size: 14px;*/
+/*    gap: 8px;*/
+/*}*/
+
+.selected-tags-container {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 400px;
+    max-height: 120px; /* 고정 높이 */
+    overflow-y: auto;  /* 세로 스크롤 */
+    padding: 10px 15px;
+    border: 2px solid #999;
+    border-radius: 25px 0 0 25px;
+    background-color: white;
+    font-size: 14px;
+    gap: 8px;
+}
+
+.selected-tag {
+    background-color: #ffecec;
+    border: 1px solid #eb1c24;
+    color: #eb1c24;
+    border-radius: 20px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 5px;
+}
+
+.remove-tag-button {
+    background: none;
+    border: none;
+    color: #eb1c24;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+}
+
+.remove-tag-button:hover {
+    color: black;
+}
+
+.placeholder-text {
+    color: #999;
+    font-size: 15px;
+}

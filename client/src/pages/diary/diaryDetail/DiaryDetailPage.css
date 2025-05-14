@@ -1,3 +1,10 @@
+/* 전체 화면을 위한 최상위 컨테이너 */
+.fullscreenContainer {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
 .container {
     width: 100%;
     max-width: 1200px;
@@ -10,11 +17,34 @@
 .backButton {
     position: absolute;
     top: 5px;
-    left: 24px;
+    left: 15px;
+    padding-left: 20px;
     font-size: 20px;
+    font-weight: bold;
     background: none;
     border: none;
     cursor: pointer;
+    outline: none; /* 클릭 시 생기는 외곽선 제거 */
+    transition: transform 0.2s ease; /* 호버시 부드럽게 커지는 애니메이션 효과 */
+    z-index: 1000; /* 추가 */
+}
+
+/* 버튼에 호버 효과를 적용 */
+.backButton:hover {
+    transform: scale(1.1); /* 호버 시 크기 1.2배로 커짐 */
+}
+
+/* 버튼이 눌렸을 때의 기본 효과 */
+.backButton:active {
+    background: none; /* 눌렀을 때 배경색 제거 */
+    transform: scale(1); /* 눌렀을 때 크기는 원래 크기로 유지 */
+    outline: none;  /* 클릭 시 외곽선 제거 */
+    box-shadow: none; /* 그림자 제거 */
+}
+
+/* 버튼에 포커스가 갔을 때의 외곽선도 제거 */
+.backButton:focus {
+    outline: none;
 }
 
 .title {
@@ -79,8 +109,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 10px;
-    margin-top: 20px;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
 }
 
 .tag {
@@ -100,18 +130,23 @@
     color: white;
 }
 
-
-/* 반응형 추가 */
+/* 모바일 화면에서는 뒤로가기 버튼이 맨 위에 오도록 수정 */
 @media (max-width: 768px) {
+    /* 뒤로가기 버튼을 화면 상단에 고정 */
+    .backButton {
+        position: fixed;
+        top: 10px;
+        left: 15px;
+        z-index: 1000; /* 항상 맨 위에 표시 */
+    }
+
+    /* 제목과 다른 요소들이 뒤로가기 버튼 아래로 배치되도록 */
     .container {
-        padding: 24px 16px;
+        margin-top: 30px; /* 버튼이 위에 고정되므로 제목을 아래로 위치시킴 */
     }
 
     .title {
         font-size: 22px;
-    }
-
-    .editorWrapper {
-        min-height: 300px;
+        margin-top: 60px; /* 뒤로가기 버튼 아래로 제목 배치 */
     }
 }

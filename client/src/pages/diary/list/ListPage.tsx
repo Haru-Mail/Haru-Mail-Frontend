@@ -155,7 +155,7 @@ const ListPage: React.FC = () => {
           )}
         </section>
 
-        <button className="write-button" onClick={() => navigate('/editor')}>
+        <button className="write-button" onClick={() => navigate('/editor/제목 없음')}>
           일기 작성하기 ✏️
         </button>
       </main>
